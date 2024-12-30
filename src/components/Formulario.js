@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable, Alert } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-const Formulario = ({ modalVisible, setModalVisible }) => {
+const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) => {
 
     const [patient, setPatient] = useState('');
     const [owner, setOwner] = useState('');
@@ -10,6 +10,32 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
     const [phone, setPhone] = useState('');
     const [registrationDate, setRegistrationDate] = useState(new Date);
     const [symptoms, setSymptoms] = useState('');
+
+    const handleRegister = () => {
+        //Data validation
+        if([patient, owner, email, phone, registrationDate, symptoms].includes('')){
+            Alert.alert('Error', 'Todos los campos son obligatorios')
+            return
+        }
+        const newPatient = {
+            patient,
+            owner,
+            email,
+            phone,
+            registrationDate,
+            symptoms
+        }
+        setPatients([...patients, newPatient])
+        setModalVisible(!modalVisible)
+
+        setPatient('')
+        setOwner('')
+        setEmail('')
+        setPhone('')
+        setRegistrationDate(new Date)
+        setSymptoms('')
+
+    }
 
     return (
         <Modal
@@ -127,6 +153,7 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
                     </View>
                     <Pressable
                         style={style.btnAdd}
+                        onPress={handleRegister}
                     >
                         <Text
                             style={style.btnAddText}
