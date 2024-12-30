@@ -27,7 +27,7 @@ const App = () => {
 
       <Pressable
         style={style.btnNuevaCita}
-        onPress={() => setModalVisible(true)}
+        onPress={() => setModalVisible(!modalVisible)}
       >
         <Text style={style.btnTextoNuevCita}>Nueva Cita</Text>
       </Pressable>
