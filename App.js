@@ -12,8 +12,10 @@ import {
   Text,
   Pressable,
   Modal,
+  FlatList,
 } from 'react-native';
 import Formulario from './src/components/Formulario';
+import Patient from './src/components/Patient';
 
 
 const App = () => {
@@ -31,7 +33,22 @@ const App = () => {
       >
         <Text style={style.btnTextoNuevCita}>Nueva Cita</Text>
       </Pressable>
-      {patients.length === 0 ? <Text>No hay pacientes aún</Text> : <Text>Sí hay pacientes {patients.length}</Text>}
+      {
+        patients.length === 0 
+          ? <Text style={style.noPatients}>No hay pacientes aún</Text> 
+          : <FlatList
+              style={style.list}
+              data={patients}
+              keyExtractor={(item) => item.id}
+              renderItem={({item}) => {
+                return(
+                  <Patient
+                    item={item}
+                  />
+                )
+              }}
+            />
+      }
       <Formulario
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
@@ -72,6 +89,16 @@ const style = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase',
   },
+  noPatients: {
+    marginTop: 40,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '600'
+  },
+  list: {
+    marginTop: 50,
+    marginHorizontal: 30
+  }
 });
 
 export default App;

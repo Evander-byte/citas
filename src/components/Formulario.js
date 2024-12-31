@@ -18,6 +18,7 @@ const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) =>
             return
         }
         const newPatient = {
+            id: Date.now(),
             patient,
             owner,
             email,
