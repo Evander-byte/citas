@@ -1,15 +1,36 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable, Alert } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) => {
+const Formulario = ({ 
+    modalVisible, 
+    setModalVisible, 
+    patients, 
+    setPatients,
+    patient: patientObj,
+    setPatient: setPatientApp 
+}) => {
 
     const [patient, setPatient] = useState('');
+    const [id, setId] = useState('');
     const [owner, setOwner] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [registrationDate, setRegistrationDate] = useState(new Date);
     const [symptoms, setSymptoms] = useState('');
+    console.log(patientObj);
+
+    useEffect(() => {
+        if(Object.keys(patientObj).length > 0) {
+            setPatient(patientObj.patient),
+            setId(patientObj.id),
+            setOwner(patientObj.owner),
+            setEmail(patientObj.email),
+            setPhone(patientObj.phone),
+            setRegistrationDate(patientObj.registrationDate),
+            setSymptoms(patientObj.symptoms)
+        }
+    }, [patientObj])
 
     const handleRegister = () => {
         //Data validation
@@ -17,8 +38,8 @@ const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) =>
             Alert.alert('Error', 'Todos los campos son obligatorios')
             return
         }
+
         const newPatient = {
-            id: Date.now(),
             patient,
             owner,
             email,
@@ -26,7 +47,20 @@ const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) =>
             registrationDate,
             symptoms
         }
-        setPatients([...patients, newPatient])
+
+        if(id){
+            //Edit 
+            newPatient.id = id
+            const updatedPatients = patients.map(pacienteState => pacienteState.id === newPatient.id ? newPatient : pacienteState)
+
+            setPatients(updatedPatients)
+            setPatientApp({})
+        } else {
+            //New register
+            newPatient.id = Date.now()
+            setPatients([...patients, newPatient])
+        }
+
         setModalVisible(!modalVisible)
 
         setPatient('')
@@ -56,7 +90,10 @@ const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) =>
                     </Text>
                     <Pressable 
                         style={style.btnCancel}
-                        onLongPress={() => setModalVisible(!modalVisible)}
+                        onLongPress={() => {
+                            setModalVisible(!modalVisible)
+                            setPatientApp({})
+                        }}
                     >
                         <Text style={style.btnCancelText}>Cancelar</Text>
                     </Pressable>
@@ -156,9 +193,11 @@ const Formulario = ({ modalVisible, setModalVisible, patients, setPatients }) =>
                         style={style.btnAdd}
                         onPress={handleRegister}
                     >
-                        <Text
-                            style={style.btnAddText}
-                        >Registrar Paciente</Text>
+                        {
+                            Object.keys(patientObj).length > 0
+                            ? <Text style={style.btnAddText}>Editar Paciente</Text>
+                            : <Text style={style.btnAddText}>Registrar Paciente</Text>
+                        }
                     </Pressable>
                 </ScrollView>
             </SafeAreaView>

@@ -22,6 +22,12 @@ const App = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [patients, setPatients] = useState([]);
+  const [patient, setPatient] = useState({});
+
+  const getPatientId = id => {
+    const patientEdit = patients.filter(patient => patient.id === id)
+    setPatient(patientEdit[0])
+  }
 
   return (
     <SafeAreaView style={style.container}>
@@ -44,6 +50,8 @@ const App = () => {
                 return(
                   <Patient
                     item={item}
+                    setModalVisible={setModalVisible}
+                    getPatientId={getPatientId}
                   />
                 )
               }}
@@ -54,6 +62,8 @@ const App = () => {
         setModalVisible={setModalVisible}
         patients={patients}
         setPatients={setPatients}
+        patient={patient}
+        setPatient={setPatient}
       />
     </SafeAreaView>
   );
