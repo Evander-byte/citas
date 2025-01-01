@@ -18,8 +18,7 @@ const Formulario = ({
     const [phone, setPhone] = useState('');
     const [registrationDate, setRegistrationDate] = useState(new Date);
     const [symptoms, setSymptoms] = useState('');
-    console.log(patientObj);
-
+ 
     useEffect(() => {
         if(Object.keys(patientObj).length > 0) {
             setPatient(patientObj.patient),
@@ -83,7 +82,7 @@ const Formulario = ({
                 <ScrollView>
                     <Text
                         style={style.titulo}
-                    >Nueva {''}
+                    >{patientObj.id ? 'Editar' : 'Nueva'} {''}
                         <Text
                             style={style.tituloBold}
                         >Cita</Text>
@@ -91,8 +90,15 @@ const Formulario = ({
                     <Pressable 
                         style={style.btnCancel}
                         onLongPress={() => {
-                            setModalVisible(!modalVisible)
                             setPatientApp({})
+                            setModalVisible(!modalVisible)
+                            setId(''),
+                            setPatient(''),
+                            setOwner(''),
+                            setEmail(''),
+                            setPhone(''),
+                            setRegistrationDate(new Date),
+                            setSymptoms('')
                         }}
                     >
                         <Text style={style.btnCancelText}>Cancelar</Text>
@@ -193,11 +199,7 @@ const Formulario = ({
                         style={style.btnAdd}
                         onPress={handleRegister}
                     >
-                        {
-                            Object.keys(patientObj).length > 0
-                            ? <Text style={style.btnAddText}>Editar Paciente</Text>
-                            : <Text style={style.btnAddText}>Registrar Paciente</Text>
-                        }
+                    <Text style={style.btnAddText}>{patientObj.id ? 'Editar' : 'Registrar'} Paciente</Text>
                     </Pressable>
                 </ScrollView>
             </SafeAreaView>

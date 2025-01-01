@@ -13,6 +13,7 @@ import {
   Pressable,
   Modal,
   FlatList,
+  Alert,
 } from 'react-native';
 import Formulario from './src/components/Formulario';
 import Patient from './src/components/Patient';
@@ -27,6 +28,20 @@ const App = () => {
   const getPatientId = id => {
     const patientEdit = patients.filter(patient => patient.id === id)
     setPatient(patientEdit[0])
+  }
+
+  const patientDelete = id => {
+    Alert.alert(
+      'Are you sure to delete this patient?',
+      'A deleted patient cannot be recovered',
+      [
+        {text: 'Cancel'},
+        {text: 'Yes, Delete', onPress: () => {
+          const updatedPatients = patients.filter(patientState => patientState.id !== id)
+          setPatients(updatedPatients)
+        }}
+      ]
+    )
   }
 
   return (
@@ -52,6 +67,7 @@ const App = () => {
                     item={item}
                     setModalVisible={setModalVisible}
                     getPatientId={getPatientId}
+                    patientDelete={patientDelete}
                   />
                 )
               }}

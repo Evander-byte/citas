@@ -4,7 +4,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 const Patient = ({
     item, 
     setModalVisible, 
-    getPatientId
+    getPatientId,
+    patientDelete
 }) => {
 
     const {patient, registrationDate, id} = item
@@ -35,7 +36,12 @@ const Patient = ({
             >
                 <Text style={styles.btnText}>Editar</Text>
             </Pressable>
-            <Pressable style={[styles.btn, styles.btnDelete]}>
+            <Pressable 
+                style={[styles.btn, styles.btnDelete]}
+                onLongPress={() => {
+                    patientDelete(id)
+                }}
+            >
                 <Text style={styles.btnText}>Eliminar</Text>
             </Pressable>
         </View>
