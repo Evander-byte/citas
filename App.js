@@ -17,13 +17,15 @@ import {
 } from 'react-native';
 import Formulario from './src/components/Formulario';
 import Patient from './src/components/Patient';
+import PatientInformation from './src/components/PatientInformation';
 
 
 const App = () => {
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [patients, setPatients] = useState([]);
-  const [patient, setPatient] = useState({});
+  const [modalVisible, setModalVisible] = useState(false)
+  const [patients, setPatients] = useState([])
+  const [patient, setPatient] = useState({})
+  const [modalPatient, setModalPatient] = useState(false)
 
   const getPatientId = id => {
     const patientEdit = patients.filter(patient => patient.id === id)
@@ -68,19 +70,33 @@ const App = () => {
                     setModalVisible={setModalVisible}
                     getPatientId={getPatientId}
                     patientDelete={patientDelete}
+                    setModalPatient={setModalPatient}
+                    setPatient={setPatient}
                   />
                 )
               }}
             />
       }
-      <Formulario
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        patients={patients}
-        setPatients={setPatients}
-        patient={patient}
-        setPatient={setPatient}
-      />
+      {modalVisible && (
+          <Formulario
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          patients={patients}
+          setPatients={setPatients}
+          patient={patient}
+          setPatient={setPatient}
+        />
+      )}
+      <Modal
+        visible={modalPatient}
+        animationType='fade'
+      >
+        <PatientInformation
+          patient={patient}
+          setModalPatient={setModalPatient}
+          setPatient={setPatient}
+        />
+      </Modal>
     </SafeAreaView>
   );
 };
